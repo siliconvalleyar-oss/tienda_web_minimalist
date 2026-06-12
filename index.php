@@ -9,7 +9,29 @@ $text = getSetting('text_color', $pdo);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda Minimalista</title>
+    <meta name="description" content="Tienda minimalista con diseño elegante, productos seleccionados y envíos a todo el país. Animaciones GSAP, carrito de compras y chatbot integrado.">
+    <meta name="keywords" content="tienda, minimalista, diseño, productos, ecommerce, decoración">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Animation Web Skill">
+    <meta name="theme-color" content="<?= $primary ?>">
+    <meta property="og:title" content="Tienda Minimalista">
+    <meta property="og:description" content="Productos que combinan estética pura y funcionalidad">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tienda-minimalista.example.com">
+    <meta property="og:image" content="https://picsum.photos/id/2/1200/630">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Tienda Minimalista — Diseño con alma</title>
+    <link rel="canonical" href="https://tienda-minimalista.example.com">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "Tienda Minimalista",
+        "description": "Productos que combinan estética pura y funcionalidad",
+        "url": "https://tienda-minimalista.example.com",
+        "address": { "@type": "PostalAddress", "addressCountry": "AR" }
+    }
+    </script>
     <style>
         :root {
             --primary: <?= $primary ?>;
@@ -36,16 +58,6 @@ $text = getSetting('text_color', $pdo);
             z-index: 100;
             border-bottom: 1px solid #eee;
         }
-        .hero {
-            height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: #fafafa;
-        }
-        .hero h2 { font-size: 3rem; font-weight: 400; letter-spacing: -0.02em; }
         .products {
             max-width: 1200px;
             margin: 4rem auto;
@@ -74,6 +86,30 @@ $text = getSetting('text_color', $pdo);
         }
         button:hover { opacity: 0.85; }
         footer { text-align: center; padding: 2rem; border-top: 1px solid #eee; color: #888; font-size: 0.8rem; }
+
+        /* BS Carousel hero — transiciones suaves */
+        .hero-carousel { margin-top: 76px; }
+        .hero-carousel .carousel-item { height: 80vh; background: #fafafa; transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out; }
+        .hero-carousel .carousel-item img { object-fit: cover; height: 100%; }
+        .hero-carousel .carousel-caption {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(4px);
+            border-radius: 1rem;
+            padding: 2rem 3rem;
+            bottom: 50%;
+            transform: translateY(50%);
+            color: var(--text);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .hero-carousel .carousel-caption h2 { font-size: 2.5rem; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+        .hero-carousel .carousel-caption p { margin: 0; opacity: 0.7; }
+        .hero-carousel .carousel-indicators button { background: var(--primary); width: 10px; height: 10px; border-radius: 50%; transition: opacity 0.3s; }
+        .hero-carousel .carousel-indicators button:hover { opacity: 0.6; }
+        .hero-carousel .carousel-control-prev-icon,
+        .hero-carousel .carousel-control-next-icon { filter: invert(1); width: 2rem; height: 2rem; transition: transform 0.3s ease; }
+        .hero-carousel .carousel-control-prev:hover .carousel-control-prev-icon { transform: translateX(-4px); }
+        .hero-carousel .carousel-control-next:hover .carousel-control-next-icon { transform: translateX(4px); }
 
         .chatbot-btn {
             position: fixed;
@@ -162,8 +198,11 @@ $text = getSetting('text_color', $pdo);
             font-weight: bold;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 </head>
 <body>
 
@@ -180,10 +219,42 @@ $text = getSetting('text_color', $pdo);
 </header>
 
 <main>
-    <section class="hero">
-        <h2>Diseño con alma</h2>
-        <p>Productos que combinan estética pura y funcionalidad</p>
-    </section>
+    <div id="heroCarousel" class="carousel slide hero-carousel carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://picsum.photos/id/2/1600/900" class="d-block w-100" alt="Diseño con alma — muebles minimalistas" loading="lazy">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Diseño con alma</h2>
+                    <p>Productos que combinan estética pura y funcionalidad</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://picsum.photos/id/3/1600/900" class="d-block w-100" alt="Calidad superior — productos seleccionados" loading="lazy">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Calidad superior</h2>
+                    <p>Materiales seleccionados para durar toda la vida</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://picsum.photos/id/4/1600/900" class="d-block w-100" alt="Envíos a todo el país" loading="lazy">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Envíos a todo el país</h2>
+                    <p>Recibí tus productos en la puerta de tu casa</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
     <section class="products" id="products"></section>
 </main>
 
@@ -213,8 +284,9 @@ $text = getSetting('text_color', $pdo);
     </div>
 </div>
 
-<script src="js/cart.js"></script>
-<script src="js/animations.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="js/cart.js" defer></script>
+<script src="js/animations.js" defer></script>
 <script>
     const chatbotToggle = document.getElementById('chatbotToggle');
     const chatWindow = document.getElementById('chatWindow');
