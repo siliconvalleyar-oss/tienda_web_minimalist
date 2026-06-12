@@ -15,7 +15,7 @@ function renderProducts() {
             <img src="${p.image}" alt="${p.name}" loading="lazy" style="width:100%; border-radius:0.5rem; margin-bottom:1rem;">
             <h3>${p.name}</h3>
             <div class="price">$${p.price}</div>
-            <button onclick="addToCart(${p.id})">Agregar</button>
+            <button class="btn" onclick="addToCart(${p.id})">Agregar</button>
         </div>
     `).join('');
 }

@@ -37,26 +37,64 @@ $text = getSetting('text_color', $pdo);
             --primary: <?= $primary ?>;
             --bg: <?= $bg ?>;
             --text: <?= $text ?>;
+            --color-border: #eee;
+            --color-gray: #888;
+            --color-gray-light: #f5f5f7;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 20px rgba(0,0,0,0.04);
+            --shadow-hover: 0 20px 30px -12px rgba(0,0,0,0.08);
+            --radius: 1rem;
         }
         * { margin:0; padding:0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.5;
+            line-height: 1.6;
         }
         .header {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2rem;
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(10px);
+            padding: 1.2rem 2rem;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             z-index: 100;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--color-border);
+            transition: var(--transition);
+        }
+        .header.scrolled { box-shadow: 0 5px 20px rgba(0,0,0,0.06); }
+        .nav-list { display: flex; gap: 2rem; align-items: center; list-style: none; }
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            position: relative;
+            padding: 0.25rem 0;
+            transition: var(--transition);
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 1.5px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+        .nav-link:hover::after { width: 100%; }
+        .menu-toggle {
+            display: none; flex-direction: column; cursor: pointer; gap: 4px;
+            background: none; border: none; padding: 4px; border-radius: 4px;
+        }
+        .menu-toggle span {
+            display: block; width: 22px; height: 2px;
+            background: var(--text); transition: var(--transition);
         }
         .products {
             max-width: 1200px;
@@ -73,19 +111,94 @@ $text = getSetting('text_color', $pdo);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid #f0f0f0;
         }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -12px rgba(0,0,0,0.05); }
+        .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
         .price { font-size: 1.25rem; font-weight: 500; margin: 1rem 0; }
-        button {
+        .btn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 0.6rem 1.2rem;
+            padding: 0.6rem 1.4rem;
             border-radius: 2rem;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.9rem;
         }
-        button:hover { opacity: 0.85; }
-        footer { text-align: center; padding: 2rem; border-top: 1px solid #eee; color: #888; font-size: 0.8rem; }
+        .btn:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn .ripple {
+            position: absolute; border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transform: scale(0); animation: rippleAnim 0.5s linear;
+            pointer-events: none;
+        }
+        @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+        /* Logo */
+        .logo-link {
+            font-weight: 600; font-size: 1.2rem;
+            color: var(--text); text-decoration: none;
+            letter-spacing: -0.5px;
+            transition: var(--transition);
+        }
+        .logo-link:hover { opacity: 0.7; }
+
+        /* Footer */
+        .footer {
+            text-align: center; padding: 3rem 2rem 2rem;
+            border-top: 1px solid var(--color-border);
+        }
+        .footer-content {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; flex-wrap: wrap; gap: 2rem;
+            max-width: 1200px; margin: 0 auto 2rem; text-align: left;
+        }
+        .footer-col h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 1rem; color: var(--text); }
+        .footer-col p, .footer-col a { font-size: 0.8rem; color: var(--color-gray); text-decoration: none; line-height: 1.8; display: block; }
+        .footer-col a:hover { color: var(--primary); }
+        .footer-bottom {
+            border-top: 1px solid var(--color-border);
+            padding-top: 1.5rem; font-size: 0.75rem; color: var(--color-gray);
+        }
+
+        /* Back to top */
+        .back-to-top {
+            position: fixed; bottom: 5rem; right: 2rem;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--primary); color: white; border: none;
+            cursor: pointer; opacity: 0; visibility: hidden;
+            transition: var(--transition); z-index: 999;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .back-to-top.show { opacity: 1; visibility: visible; }
+        .back-to-top:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+        .back-to-top svg { width: 18px; height: 18px; fill: currentColor; }
+
+        /* Mobile nav */
+        @media (max-width: 768px) {
+            .nav-list {
+                display: none; flex-direction: column;
+                position: absolute; top: 100%; left: 0; right: 0;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(15px);
+                padding: 1rem 2rem; gap: 1rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+                border-top: 1px solid var(--color-border);
+            }
+            .nav-list.active { display: flex; }
+            .menu-toggle { display: flex; }
+            .hero-carousel .carousel-caption {
+                display: block !important;
+                bottom: 30%; transform: none;
+                left: 5%; right: 5%; width: auto;
+                padding: 1.2rem;
+            }
+            .hero-carousel .carousel-caption h2 { font-size: 1.5rem; }
+            .hero-carousel .carousel-caption p { font-size: 0.85rem; }
+            .hero-carousel .carousel-item { height: 60vh; }
+            .footer-content { flex-direction: column; text-align: center; }
+        }
 
         /* BS Carousel hero — transiciones suaves */
         .hero-carousel { margin-top: 76px; }
@@ -201,21 +314,25 @@ $text = getSetting('text_color', $pdo);
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 </head>
 <body>
 
-<header class="header">
-    <!-- LOGO PLACEHOLDER: Reemplazar por tu logo.
-         Ejemplo: <img src="assets/logo.png" alt="Tu Marca" height="32"> -->
+<header class="header" id="header">
     <div class="logo-placeholder">
-        <a href="/" style="font-weight:600; font-size:1.2rem; color:var(--text); text-decoration:none; letter-spacing:-0.5px;">[TU LOGO AQUÍ]</a>
+        <a href="/" class="logo-link">[TU LOGO AQUÍ]</a>
     </div>
-    <nav>
-        <a href="#" style="color:var(--text); text-decoration:none;">Productos</a>
-        <a href="#" style="color:var(--text); text-decoration:none; margin-left:1rem;">Carrito (<span id="cart-count">0</span>)</a>
+    <nav class="nav">
+        <ul class="nav-list" id="navList">
+            <li><a href="#" class="nav-link">Productos</a></li>
+            <li><a href="#" class="nav-link">Carrito (<span id="cart-count">0</span>)</a></li>
+        </ul>
     </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menú">
+        <span></span><span></span><span></span>
+    </button>
 </header>
 
 <main>
@@ -255,19 +372,39 @@ $text = getSetting('text_color', $pdo);
             <span class="carousel-control-next-icon"></span>
         </button>
     </div>
-    <section class="products" id="products"></section>
+    <section class="products" id="products" data-aos="fade-up"></section>
 </main>
 
-<footer>
-    <!-- PUBLICIDAD / SPONSOR PLACEHOLDER
-         Reemplazar por tu publicidad, enlaces afiliados o créditos.
-         Ejemplo: <a href="https://tusitio.com" target="_blank">Patrocinado por Tu Marca</a>
-    -->
-    <div class="sponsor" style="margin-bottom:0.5rem; font-size:0.75rem; color:#aaa;">
-        [PUBLICIDAD / SPONSOR - Reemplazar por tu contenido]
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-col">
+            <h4>Animation Web Skill</h4>
+            <p>Tienda minimalista con animaciones, carrito y chatbot. Código abierto y personalizable.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Enlaces</h4>
+            <a href="#">Productos</a>
+            <a href="admin/login.php">Admin</a>
+        </div>
+        <div class="footer-col">
+            <h4>Contacto</h4>
+            <p>WhatsApp: +56 9 1234 5678</p>
+            <p>Email: info@example.com</p>
+        </div>
+        <div class="footer-col">
+            <h4>Publicidad</h4>
+            <!-- PUBLICIDAD PLACEHOLDER: Reemplazar por tu contenido -->
+            <p style="opacity:0.5;">[TU PUBLICIDAD AQUÍ]</p>
+        </div>
     </div>
-    <p>© 2026 · Inspirado en Aura y Cynthia Ugwu</p>
+    <div class="footer-bottom">
+        <p>© 2026 · Animation Web Skill — Tienda Minimalista</p>
+    </div>
 </footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Volver arriba">
+    <svg viewBox="0 0 24 24"><path d="M12 5l-7 7h14l-7-7z"/></svg>
+</button>
 
 <div class="chatbot-btn" id="chatbotToggle">💬</div>
 <div class="chat-window" id="chatWindow">
@@ -284,9 +421,11 @@ $text = getSetting('text_color', $pdo);
     </div>
 </div>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 <script src="js/cart.js" defer></script>
 <script src="js/animations.js" defer></script>
+<script src="js/main.js" defer></script>
 <script>
     const chatbotToggle = document.getElementById('chatbotToggle');
     const chatWindow = document.getElementById('chatWindow');
