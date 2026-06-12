@@ -1,5 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // Hero carousel keyboard nav
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') {
+            const prev = document.getElementById('anglePrev');
+            if (prev) prev.click();
+        } else if (e.key === 'ArrowRight') {
+            const next = document.getElementById('angleNext');
+            if (next) next.click();
+        }
+    });
+
     // AOS init (from WEB)
     if (typeof AOS !== 'undefined') {
         AOS.init({ duration: 600, easing: 'ease-out', once: true, offset: 60 });

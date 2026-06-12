@@ -134,8 +134,171 @@ $text = getSetting('text_color', $pdo);
         }
         @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
 
-        /* Logo */
-        .logo-link {
+        /* Hero — room-style split layout */
+        .hero {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            min-height: 100vh;
+            margin-top: 76px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-image-wrap {
+            position: relative;
+            overflow: hidden;
+            background: #fafafa;
+        }
+        .hero-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5rem 3.5rem;
+            background: var(--bg);
+        }
+        .hero-content .hero-title {
+            font-size: 2.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 1.2rem;
+            color: var(--text);
+        }
+        .hero-content .hero-desc {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--color-gray);
+            margin-bottom: 2rem;
+            max-width: 90%;
+        }
+        .hero-content .btn-explore {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8em;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.6em;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 0;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .hero-content .btn-explore::after {
+            content: '→';
+            display: inline-block;
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+        .hero-content .btn-explore:hover {
+            color: var(--color-gray);
+        }
+        .hero-content .btn-explore:hover::after {
+            transform: translateX(8px);
+        }
+
+        /* Angle nav buttons — overlapping (room style) */
+        .hero-angles {
+            display: flex;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+        }
+        .hero-angles button {
+            padding: 1.2rem 1.6rem;
+            background: #000;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-angles button:hover { background: hsl(0, 0%, 27%); }
+        .hero-angles button svg {
+            width: 12px; height: 20px;
+            stroke: #fff; fill: none; stroke-width: 2;
+            transition: transform 0.3s ease;
+        }
+        .hero-angles button:hover svg { transform: scale(1.3); }
+
+        /* About section — room style 3-column grid */
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            max-width: 100%;
+            margin: 0;
+        }
+        .about .about-img {
+            display: flex;
+            align-items: stretch;
+            overflow: hidden;
+        }
+        .about .about-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+        .about .about-img:hover img { transform: scale(1.03); }
+        .about .about-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 3rem;
+            background: var(--bg);
+        }
+        .about .about-text h2 {
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .about .about-text p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--color-gray);
+            margin-bottom: 0.8rem;
+        }
+        .about .about-text .about-detail {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 1.5rem;
+        }
+        .about .about-btn {
+            align-self: flex-start;
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .about .about-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+        .products {
             font-weight: 600; font-size: 1.2rem;
             color: var(--text); text-decoration: none;
             letter-spacing: -0.5px;
@@ -175,7 +338,7 @@ $text = getSetting('text_color', $pdo);
         .back-to-top:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
         .back-to-top svg { width: 18px; height: 18px; fill: currentColor; }
 
-        /* Mobile nav */
+        /* Mobile nav + responsive */
         @media (max-width: 768px) {
             .nav-list {
                 display: none; flex-direction: column;
@@ -188,41 +351,21 @@ $text = getSetting('text_color', $pdo);
             }
             .nav-list.active { display: flex; }
             .menu-toggle { display: flex; }
-            .hero-carousel .carousel-caption {
-                display: block !important;
-                bottom: 30%; transform: none;
-                left: 5%; right: 5%; width: auto;
-                padding: 1.2rem;
+            .hero {
+                grid-template-columns: 1fr;
+                min-height: auto;
             }
-            .hero-carousel .carousel-caption h2 { font-size: 1.5rem; }
-            .hero-carousel .carousel-caption p { font-size: 0.85rem; }
-            .hero-carousel .carousel-item { height: 60vh; }
+            .hero-image-wrap { height: 50vh; }
+            .hero-content { padding: 2.5rem 1.8rem; }
+            .hero-content .hero-title { font-size: 2rem; }
+            .hero-content .hero-desc { max-width: 100%; font-size: 0.95rem; }
+            .hero-angles { left: 0; }
+            .about {
+                grid-template-columns: 1fr;
+            }
+            .about .about-text { padding: 2.5rem 1.8rem; }
             .footer-content { flex-direction: column; text-align: center; }
         }
-
-        /* BS Carousel hero — transiciones suaves */
-        .hero-carousel { margin-top: 76px; }
-        .hero-carousel .carousel-item { height: 80vh; background: #fafafa; transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out; }
-        .hero-carousel .carousel-item img { object-fit: cover; height: 100%; }
-        .hero-carousel .carousel-caption {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(4px);
-            border-radius: 1rem;
-            padding: 2rem 3rem;
-            bottom: 50%;
-            transform: translateY(50%);
-            color: var(--text);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .hero-carousel .carousel-caption h2 { font-size: 2.5rem; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
-        .hero-carousel .carousel-caption p { margin: 0; opacity: 0.7; }
-        .hero-carousel .carousel-indicators button { background: var(--primary); width: 10px; height: 10px; border-radius: 50%; transition: opacity 0.3s; }
-        .hero-carousel .carousel-indicators button:hover { opacity: 0.6; }
-        .hero-carousel .carousel-control-prev-icon,
-        .hero-carousel .carousel-control-next-icon { filter: invert(1); width: 2rem; height: 2rem; transition: transform 0.3s ease; }
-        .hero-carousel .carousel-control-prev:hover .carousel-control-prev-icon { transform: translateX(-4px); }
-        .hero-carousel .carousel-control-next:hover .carousel-control-next-icon { transform: translateX(4px); }
 
         .chatbot-btn {
             position: fixed;
@@ -313,7 +456,6 @@ $text = getSetting('text_color', $pdo);
     </style>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
@@ -335,45 +477,44 @@ $text = getSetting('text_color', $pdo);
     </button>
 </header>
 
-<main>
-    <div id="heroCarousel" class="carousel slide hero-carousel carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://picsum.photos/id/2/1600/900" class="d-block w-100" alt="Diseño con alma — muebles minimalistas" loading="lazy">
-                <div class="carousel-caption d-none d-md-block">
-                    <h2>Diseño con alma</h2>
-                    <p>Productos que combinan estética pura y funcionalidad</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="https://picsum.photos/id/3/1600/900" class="d-block w-100" alt="Calidad superior — productos seleccionados" loading="lazy">
-                <div class="carousel-caption d-none d-md-block">
-                    <h2>Calidad superior</h2>
-                    <p>Materiales seleccionados para durar toda la vida</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="https://picsum.photos/id/4/1600/900" class="d-block w-100" alt="Envíos a todo el país" loading="lazy">
-                <div class="carousel-caption d-none d-md-block">
-                    <h2>Envíos a todo el país</h2>
-                    <p>Recibí tus productos en la puerta de tu casa</p>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
+<section class="hero" id="hero">
+    <div class="hero-image-wrap">
+        <img id="heroImg" src="https://picsum.photos/id/2/1600/900" alt="Diseño con alma">
+        <div class="hero-overlay"></div>
     </div>
-    <section class="products" id="products" data-aos="fade-up"></section>
-</main>
+    <div class="hero-content">
+        <h1 class="hero-title" id="heroTitle">Diseño con alma</h1>
+        <p class="hero-desc" id="heroDesc">Productos que combinan estética pura y funcionalidad. Descubre nuestra colección cuidadosamente seleccionada.</p>
+        <button class="btn-explore" id="heroCta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explorar</button>
+        <div class="hero-angles">
+            <button id="anglePrev" aria-label="Anterior">
+                <svg viewBox="0 0 14 24"><polyline points="13,0 1,12 13,24"/></svg>
+            </button>
+            <button id="angleNext" aria-label="Siguiente">
+                <svg viewBox="0 0 14 24"><polyline points="1,0 13,12 1,24"/></svg>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="products" id="products" data-aos="fade-up">
+    <!-- rendered by cart.js -->
+</section>
+
+<section class="about" data-aos="fade-up">
+    <div class="about-img">
+        <img src="https://picsum.photos/id/26/800/600" alt="Interior minimalista" loading="lazy">
+    </div>
+    <div class="about-text">
+        <h2>Sobre nuestra colección</h2>
+        <p>Cada pieza es seleccionada por su calidad, diseño atemporal y capacidad de transformar cualquier espacio. Creemos en el poder de lo simple.</p>
+        <p class="about-detail">Materiales sostenibles · Diseño funcional · Envío seguro</p>
+        <a href="#" class="about-btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Conocer más</a>
+    </div>
+    <div class="about-img">
+        <img src="https://picsum.photos/id/30/800/600" alt="Espacio iluminado" loading="lazy">
+    </div>
+</section>
 
 <footer class="footer">
     <div class="footer-content">
@@ -422,11 +563,40 @@ $text = getSetting('text_color', $pdo);
 </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 <script src="js/cart.js" defer></script>
 <script src="js/animations.js" defer></script>
 <script src="js/main.js" defer></script>
 <script>
+    // Hero carousel — room-homepage style (slide + swap)
+    const heroData = [
+        { img: 'https://picsum.photos/id/2/1600/900', title: 'Diseño con alma', desc: 'Productos que combinan estética pura y funcionalidad. Descubre nuestra colección cuidadosamente seleccionada.' },
+        { img: 'https://picsum.photos/id/3/1600/900', title: 'Calidad superior', desc: 'Materiales seleccionados para durar toda la vida. Cada pieza es una inversión en tu espacio.' },
+        { img: 'https://picsum.photos/id/4/1600/900', title: 'Envíos a todo el país', desc: 'Recibí tus productos en la puerta de tu casa. Envío seguro y seguimiento en tiempo real.' },
+    ];
+    let heroIndex = 0;
+    const heroImg = document.getElementById('heroImg');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroDesc = document.getElementById('heroDesc');
+    const anglePrev = document.getElementById('anglePrev');
+    const angleNext = document.getElementById('angleNext');
+
+    function updateHero(i) {
+        heroIndex = (i + heroData.length) % heroData.length;
+        const d = heroData[heroIndex];
+        heroImg.style.transform = 'translateX(-100%)';
+        heroImg.style.transition = 'transform 0.35s ease-in';
+        setTimeout(() => {
+            heroImg.src = d.img;
+            heroTitle.textContent = d.title;
+            heroDesc.textContent = d.desc;
+            heroImg.style.transition = 'none';
+            heroImg.style.transform = 'translateX(0)';
+        }, 350);
+    }
+
+    angleNext.addEventListener('click', () => updateHero(heroIndex + 1));
+    anglePrev.addEventListener('click', () => updateHero(heroIndex - 1));
+
     const chatbotToggle = document.getElementById('chatbotToggle');
     const chatWindow = document.getElementById('chatWindow');
     const closeChat = document.getElementById('closeChat');

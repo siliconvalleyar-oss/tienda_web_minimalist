@@ -1,15 +1,26 @@
 gsap.registerPlugin(ScrollTrigger);
 
-gsap.from(".hero-carousel .carousel-item.active .carousel-caption h2", {
-    opacity: 0, y: 30, duration: 0.8, ease: "power3.out"
+gsap.from(".hero-content .hero-title", {
+    opacity: 0, y: 25, duration: 0.7, ease: "power3.out"
 });
-gsap.from(".hero-carousel .carousel-item.active .carousel-caption p", {
-    opacity: 0, y: 15, duration: 0.6, delay: 0.2, ease: "power3.out"
+gsap.from(".hero-content .hero-desc", {
+    opacity: 0, y: 15, duration: 0.5, delay: 0.15, ease: "power3.out"
+});
+gsap.from(".hero-content .btn-explore", {
+    opacity: 0, y: 10, duration: 0.4, delay: 0.3, ease: "power3.out"
+});
+gsap.from(".hero-angles", {
+    opacity: 0, x: -20, duration: 0.5, delay: 0.4, ease: "power3.out"
 });
 
 gsap.from(".product-card", {
     scrollTrigger: { trigger: ".products", start: "top 85%", toggleActions: "play none none reverse" },
-    opacity: 0, y: 40, duration: 0.5, stagger: 0.08, ease: "power2.out"
+    opacity: 0, y: 35, duration: 0.5, stagger: 0.08, ease: "power2.out"
+});
+
+gsap.from(".about", {
+    scrollTrigger: { trigger: ".about", start: "top 85%", toggleActions: "play none none reverse" },
+    opacity: 0, y: 30, duration: 0.6, ease: "power2.out"
 });
 
 const circle = document.createElement('div');
@@ -29,7 +40,7 @@ document.addEventListener('mousemove', (e) => {
     circle.style.top = e.clientY + 'px';
 });
 
-document.querySelectorAll('button, a, .product-card').forEach(el => {
+document.querySelectorAll('button, a, .product-card, .about-img').forEach(el => {
     el.addEventListener('mouseenter', () => {
         circle.style.transform = 'translate(-50%, -50%) scale(2)';
         circle.style.backgroundColor = 'rgba(0,0,0,0.06)';
