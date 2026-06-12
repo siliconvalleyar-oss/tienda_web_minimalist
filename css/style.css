@@ -1,0 +1,26 @@
+* { margin:0; padding:0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+}
+
+.logo-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-placeholder img {
+    max-height: 32px;
+    width: auto;
+}
+
+.sponsor a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.sponsor a:hover {
+    text-decoration: underline;
+}
